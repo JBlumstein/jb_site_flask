@@ -3,7 +3,12 @@
 {% block title %}Index{% endblock %}
 
 {% block page_content %}
-	  <h1>Jonah's Data Science Website</h1>
-	  <p>Lorum Ipsum dolor</p>
-	  <p>More text.</p>
+	<h1>Jonah's Data Science Website</h1>
+	<p>Lorum Ipsum dolor</p>
+	<p>More text.</p>
+	<ul>
+		{% for item in blog_posts %}
+			<li>{{ item }}</li>
+		{% endfor %}
+    </ul>
 {% endblock %}

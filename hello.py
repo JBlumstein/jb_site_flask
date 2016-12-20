@@ -3,17 +3,15 @@ import os, sys
 
 app = Flask(__name__)
 
+def get_post_names(path):
+	dirs = os.listdir( path )
+	return dirs
+
 @app.route('/')
 def index():
-    return render_template('index.html')
+	blog_posts = get_post_names("C:/Users/IBM_ADMIN/Documents/flaskapp/templates/posts/")
+	return render_template('index.html', blog_posts=blog_posts)
 
 @app.route('/posts/hello')
 def render_post():
-    return render_template('hello.html')
-
-@app.route('/post_names')
-def get_post_names():
-	path = "C:/Users/IBM_ADMIN/Documents/flaskapp/templates/posts/"
-	dirs = os.listdir( path )
-	first_dir = dirs[0]
-	return first_dir
+	return render_template('hello.html')
