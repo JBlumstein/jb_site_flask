@@ -26,7 +26,7 @@ def get_post_data(folder, post):
 	url_path = '/posts/' + stub
 	printed_article = print_article(folder, post)
 	blog_title = get_article_title(printed_article)
-	blog_date = get_article_title(printed_article)
+	blog_date = get_article_date(printed_article)
 	post_data = {'post':post, 'stub':stub, 'url_path':url_path, 'blog_title': blog_title, 'blog_date': blog_date}
 	return post_data
 

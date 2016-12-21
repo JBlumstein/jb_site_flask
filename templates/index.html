@@ -3,12 +3,23 @@
 {% block title %}Index{% endblock %}
 
 {% block page_content %}
-	<h1>Jonah's Data Science Website</h1>
-	<p>Lorum Ipsum dolor</p>
-	<p>More text.</p>
-	<ul>
+	<h1>My name is Jonah</h1>
+	
+	<p>I'm a thinker, tinkerer, reader and do-er in New York, New York. I am a Senior Strategy Consultant in the Corporate Strategy Group at IBM, working on positioning the company in the quickly changing market for enterprise and SME information technology. I previously worked in business development, strategy, and marketing roles at Amazon and Hearst and have an MBA from the NYU Stern School of Business</a>. My skill set includes data analysis (Python, SQL, Excel, basic R) and web design and development (HTML, CSS, Wordpress customization, basic Flask, basic Ruby on Rails). I built this site using Flask in order to try out a new technology.</p>
+
+	<p>I'm fascinated by B2B technology, data science, the future of media, the design of everyday things, and national and New York politics. I'm also a marathoner and "amateur reader" (to quote J.D. Salinger), with the music taste of a 35-year-old ex-punk.</p>
+	
+	<h3>Blog Posts:</h3>
+	
+	<ul class="blog_post_list">
+
 		{% for item in blog_posts %}
-			<li><a href="{{ item.url_path }}">{{ item.blog_title }}</a></li>
+
+			<li><a href="{{ item.url_path }}">{{ item.blog_title }}</a><br>
+			{{ item.blog_date }}</li>
+
 		{% endfor %}
-    </ul>
+
+	</ul>
+
 {% endblock %}
