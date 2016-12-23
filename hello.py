@@ -4,7 +4,7 @@ import re
 
 app = Flask(__name__)
 
-not_blog_posts = set(['index.html', 'base.html', 'hello.html'])
+not_blog_posts = set(['index.html', 'base.html'])
 
 def top_level(folder):
 	'''top level function to run on load'''
@@ -14,8 +14,6 @@ def top_level(folder):
 		if jonahs_blog_post not in not_blog_posts:
 			one_post_data = get_post_data(folder, jonahs_blog_post)
 			posts_data.append(one_post_data)
-	for single_post in posts_data:
-		route_one_post(single_post)
 	return posts_data
 
 def get_post_names(path):
@@ -50,14 +48,6 @@ def get_article_date(article_printout):
 	article_date = re.findall(r'\<h2 id="date">(.+?)\</h2>.*?',article_printout)[0]
 	return article_date	
 
-def route_one_post(item):
-	'''create the routing for a single post'''
-	one_post_stub = item['stub']
-	one_post_template = item['post']
-	@app.route("/blog/<path:one_post_stub>")
-	def render_one_post(one_post_stub):
-		return render_template(one_post_template)
-
 blog_posts_and_paths = top_level("C:/Users/IBM_ADMIN/Documents/flaskapp/templates/")
 
 @app.route('/')
@@ -69,3 +59,9 @@ def index():
 def load_resume():
 	'''render template for index page'''
 	return render_template('resume.html')
+
+@app.route("/blog/<string:blog_post_short_name>/")
+def render_one_post(blog_post_short_name):
+	'''render blog posts'''
+	if blog_post_short_name + '.html' not in not_blog_posts:
+		return render_template('%s.html' % blog_post_short_name)
