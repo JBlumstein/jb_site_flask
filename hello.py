@@ -4,7 +4,7 @@ import re
 
 app = Flask(__name__)
 
-not_blog_posts = set(['index.html', 'base.html'])
+not_blog_posts = set(['index.html', 'base.html', 'hello.html'])
 
 def top_level(folder):
 	'''top level function to run on load'''
@@ -26,7 +26,7 @@ def get_post_names(path):
 def get_post_data(folder, post):
 	'''get post data from each post'''
 	stub = post[:-5]
-	url_path = '/' + str(stub)
+	url_path = '/blog/' + str(stub)
 	printed_article = print_article(folder, post)
 	title = get_article_title(printed_article)
 	date = get_article_date(printed_article)
@@ -52,10 +52,10 @@ def get_article_date(article_printout):
 
 def route_one_post(item):
 	'''create the routing for a single post'''
-	one_post_path = item['url_path']
+	one_post_stub = item['stub']
 	one_post_template = item['post']
-	@app.route(one_post_path)
-	def render_one_post():
+	@app.route("/blog/<path:one_post_stub>")
+	def render_one_post(one_post_stub):
 		return render_template(one_post_template)
 
 blog_posts_and_paths = top_level("C:/Users/IBM_ADMIN/Documents/flaskapp/templates/")
