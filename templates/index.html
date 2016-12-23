@@ -24,8 +24,8 @@
 
 		{% for item in blog_posts %}
 
-			<li><a href="{{ item.url_path }}">{{ item.blog_title }}</a><br>
-			{{ item.blog_date }}</li>
+			<li><a href="{{ item.url_path }}">{{ item.title }}</a><br>
+			{{ item.date }}</li>
 
 		{% endfor %}
 

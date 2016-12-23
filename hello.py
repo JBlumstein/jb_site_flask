@@ -4,13 +4,16 @@ import re
 
 app = Flask(__name__)
 
+not_blog_posts = set(['index.html', 'base.html'])
+
 def top_level(folder):
 	'''top level function to run on load'''
 	jonahs_blog_posts = get_post_names(folder)
 	posts_data = []
 	for jonahs_blog_post in jonahs_blog_posts:
-		one_post_data = get_post_data(folder, jonahs_blog_post)
-		posts_data.append(one_post_data)
+		if jonahs_blog_post not in not_blog_posts:
+			one_post_data = get_post_data(folder, jonahs_blog_post)
+			posts_data.append(one_post_data)
 	for single_post in posts_data:
 		route_one_post(single_post)
 	return posts_data
@@ -23,11 +26,11 @@ def get_post_names(path):
 def get_post_data(folder, post):
 	'''get post data from each post'''
 	stub = post[:-5]
-	url_path = '/posts/' + stub
+	url_path = '/' + str(stub)
 	printed_article = print_article(folder, post)
-	blog_title = get_article_title(printed_article)
-	blog_date = get_article_date(printed_article)
-	post_data = {'post':post, 'stub':stub, 'url_path':url_path, 'blog_title': blog_title, 'blog_date': blog_date}
+	title = get_article_title(printed_article)
+	date = get_article_date(printed_article)
+	post_data = {'post':post, 'stub':stub, 'url_path':url_path, 'title': title, 'date': date}
 	return post_data
 
 def print_article(folder, article):
@@ -44,17 +47,18 @@ def get_article_title(article_printout):
 
 def get_article_date(article_printout):
 	'''get article date from article as string'''
-	article_date = re.findall(r'\{% block date %}(.+?)\{% endblock %}.*?',article_printout)[0]
+	article_date = re.findall(r'\<h2 id="date">(.+?)\</h2>.*?',article_printout)[0]
 	return article_date	
 
 def route_one_post(item):
 	'''create the routing for a single post'''
 	one_post_path = item['url_path']
+	one_post_template = item['post']
 	@app.route(one_post_path)
 	def render_one_post():
-		return render_template(item['post'])
+		return render_template(one_post_template)
 
-blog_posts_and_paths = top_level("C:/Users/IBM_ADMIN/Documents/flaskapp/templates/posts/")
+blog_posts_and_paths = top_level("C:/Users/IBM_ADMIN/Documents/flaskapp/templates/")
 
 @app.route('/')
 def index():

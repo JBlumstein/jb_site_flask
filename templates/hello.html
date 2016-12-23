@@ -1,12 +1,13 @@
-{% extends "blog_base.html" %}
+{% extends "base.html" %}
 
-{% block title %}A Blog Post{% endblock %}
-
-{% block h1 %}A Blog Post H1{% endblock %}
-
-{% block date %}2016-12-19{% endblock %}
+{% block title %}My Blog Post{% endblock %}
 
 {% block page_content %}
-	<p>Lorum Ipsum dolor</p>
-	<p>More text.</p>
-{% endblock %}
+
+	<h1>{{ self.title() }}</h1>
+
+	<h2 id="date">2016-12-19</h2>
+
+	<p>I'm a thinker, tinkerer, reader and do-er in New York, New York. I am a Senior Strategy Consultant in the Corporate Strategy Group at IBM, working on positioning the company in the quickly changing market for enterprise and SME information technology. I previously worked in business development, strategy, and marketing roles at Amazon and Hearst and have an MBA from the NYU Stern School of Business</a>. My skill set includes data analysis (Python, SQL, Excel, basic R) and web design and development (HTML, CSS, Wordpress customization, basic Flask, basic Ruby on Rails). I built this site using Flask in order to try out a new technology.</p>
+
+{% endblock page_content %}
