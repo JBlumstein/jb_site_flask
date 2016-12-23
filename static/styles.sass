@@ -1,35 +1,43 @@
-$font-stack:       "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif
-$primary-color:    #333
-$background-color: #fff8e7
+$font-stack:       "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$primary-color:    #333;
+$background-color: #fff8e7;
 
-body
-	font: 100% $font-stack
-	color: $primary-color
-	background: $background-color
-	display: flex
-	justify-content: center
-	align-items: center
-	padding: 0
+body {
+	font: 100% $font-stack;
+	color: $primary-color;
+	background: $background-color;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 0;
+}
 
-nav
-	ul
-		margin: 0
-		padding: 0
-		list-style: none
+nav {
+	ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	li {
+		display: inline-block;
+	}
 
-	li
-		display: inline-block
+.page {
+	max-width: 1000px;
+	padding: 2em 0 2em 0;
+}
 
-.page
-	padding: 0.8em
-	margin: 2em
-	max-width: 1000px
+#date {
+	font-weight: bold;
+	font-size: 0.9em;
+}
 
-#date h2
-	font-weight: bold
-	font-size: 0.9em
+.blog_post_list {
+	list-style-type: none;
+	padding-left: 0;
+}
 
-.blog_post_list li
-	list-style: none
-	margin: 0
-	padding: 0
+.img-circle {
+	float: left;
+	margin: 0 10px 10px 0px;
+}

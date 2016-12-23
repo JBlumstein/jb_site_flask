@@ -60,3 +60,8 @@ blog_posts_and_paths = top_level("C:/Users/IBM_ADMIN/Documents/flaskapp/template
 def index():
 	'''render template for index page'''
 	return render_template('index.html', blog_posts=blog_posts_and_paths)
+
+@app.route('/resume')
+def load_resume():
+	'''render template for index page'''
+	return render_template('resume.html')

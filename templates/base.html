@@ -7,9 +7,24 @@
     <link rel="icon" type="image/gif" href="http://jonahblumstein.net/jbheadshotfavicon.gif">
 </head>
 <body>
-	<div class="page">
-	    {% block page_content %}
-    	{% endblock %}
+	<div class="nav_container">
+		<div class="nav_sizer">
+			<nav>
+				<div class="menu_container">
+					<ul>
+						<li><a href="/">Jonah Blumstein</a></li>
+						<li><a href="/resume">Resume</a></li>
+						<li><a href="mailto:jonah.blumstein@gmail.com">Email</a></li>
+					</ul>
+				</div>
+			</nav>
+		</div>
+	</div>
+	<div class="page_container">
+		<div class="page">
+			{% block page_content %}
+			{% endblock %}
+		</div>
 	</div>
 </body>
 </html>
