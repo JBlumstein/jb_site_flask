@@ -25,7 +25,8 @@
 		{% for item in blog_posts %}
 
 			<li><a href="{{ item.url_path }}">{{ item.title }}</a><br>
-			{{ item.date }}</li>
+			{{ item.date }}<br>
+			{{ item.description }}</li>
 			<br>
 
 		{% endfor %}

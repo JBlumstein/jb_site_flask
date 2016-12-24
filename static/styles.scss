@@ -2,6 +2,7 @@ $font-stack:       "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 $primary-color:    #333;
 $background-color: #fff8e7;
 $jonah-picture-width: 10em;
+$page-width: 1000px;
 
 body {
 	font: 100% $font-stack;
@@ -62,11 +63,16 @@ body {
 }
 
 .page {
-	max-width: 1000px;
+	max-width: $page-width;
 	padding: 2em 0 2em 0;
 
 	hr {
 		border-top: 1px dashed #8c8b8b;
+	}
+
+	img {
+		max-width: 100%;
+		margin: 1em 0 1em 0;
 	}
 }
 

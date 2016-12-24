@@ -5,7 +5,12 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-not_blog_posts = set(['index.html', 'base.html'])
+
+### posts not to index in list of blog posts
+not_blog_posts = set(['index.html', 'base.html', 'hello.html'])
+
+
+### start functions for displaying blog post information ###
 
 def top_level(folder):
 	'''top level function to run on load'''
@@ -31,11 +36,12 @@ def get_post_data(folder, post):
 	title = get_article_title(printed_article)
 	date = get_article_date(printed_article)
 	date = datetime.strptime(date, '%Y-%m-%d').date()
-	post_data = {'post':post, 'stub':stub, 'url_path':url_path, 'title': title, 'date': date}
+	description = get_article_description(printed_article)
+	post_data = {'post':post, 'stub':stub, 'url_path':url_path, 'title': title, 'date': date, 'description': description}
 	return post_data
 
 def print_article(folder, article):
-	'''Print out article'''
+	'''Print out article's jinja template as a string'''
 	full_article_path = folder + article
 	with open(full_article_path, 'r') as myfile:
 		printed_article=myfile.read()
@@ -43,15 +49,36 @@ def print_article(folder, article):
 
 def get_article_title(article_printout):
 	'''get article title from article as string'''
-	article_title = re.findall(r'\{% block title %}(.+?)\{% endblock %}.*?',article_printout)[0]
+	try:
+		article_title = re.findall(r'\{% block title %}(.+?)\{% endblock %}.*?',article_printout)[0]
+	except:
+		article_title = ""
 	return article_title
 
 def get_article_date(article_printout):
 	'''get article date from article as string'''
-	article_date = re.findall(r'\<h2 id="date">(.+?)\</h2>.*?',article_printout)[0]
+	try:
+		article_date = re.findall(r'\<h2 id="date">(.+?)\</h2>.*?',article_printout)[0]
+	except:
+		article_date = "2015-01-01"
 	return article_date	
 
+def get_article_description(article_printout):
+	'''get article description from article as string'''
+	try:
+		article_description = re.findall(r'\{% block description %}(.+?)\{% endblock %}.*?',article_printout)[0]
+	except:
+		article_description = ""
+	return article_description
+
+### end functions for displaying blog post information ###
+
+
+### run the functions for displaying blog post information ###
 blog_posts_and_paths = top_level("C:/Users/IBM_ADMIN/Documents/flaskapp/templates/")
+
+
+### routing ###
 
 @app.route('/')
 def index():
