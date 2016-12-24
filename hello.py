@@ -87,7 +87,7 @@ def index():
 
 @app.route('/resume')
 def load_resume():
-	'''render template for index page'''
+	'''render template for resume page'''
 	return render_template('resume.html')
 
 @app.route("/blog/<string:blog_post_short_name>/")
