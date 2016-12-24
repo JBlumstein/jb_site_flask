@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}An Idea for Personalized Alerts from the MTA{% endblock %}
+
+{% block description %}The MTA should create a more personal connection with riders by using technology to harness customer data. This data could be used to create personalized alerts for riders.{% endblock %}
+
+{% block page_content %}
+
+	<h1>{{ self.title() }}</h1>
+
+	<h2 id="date">2014-10-20</h2>
+
+	<p>New York's Metropolitan Transit Authority (MTA) has a strong brand. Everyone knows the subways, everyone loves to talk about the subways, everyone loves to complain about the subways.
+
+	<p>However, one problem I see with MTA's brand at the moment is that it's almost entirely performance-based. New Yorkers judge the MTA based on whether trains are consistently clean, safe, and on time; the frequency and severity of fare hikes; and the frequency and severity of line cuts.
+
+	<p>That's good news and bad news. The good is that right now, in a time frequent funding cuts, the MTA is doing the best it can to keep train and bus lines going and to keep the buses and trains themselves safe, clean, and on-time. The bad is that funding cuts and a persistently weak economy are forcing MTA to raise fares far too frequently by far too much for the Authority to be widely popular.
+
+	<p>However, New Yorkers rarely acknowledge that the MTA is, by American standards at least, a marvel. One reason for this is that the MTA doesn't portray itself as an ally of the public and a friend to New Yorkers. 
+
+	<p>But the MTA could change this by using technology to harness customer data to form a more personal relationship with riders. One method of creating this relationship is through personalized alerts.
+
+	<p>If I wanted to get customer-level data and I was working in marketing for MTA, I'd want to set up these customer databases:
+
+	<h4>Database 1: MetroCard-level information</h4><ul><li>MetroCard ID</li><li>card machine location (where the card was purchased or refilled)</li><li>customer name (from credit card information)</li><li>MetroCard type (proxy for how often customer rides and, to a certain degree, income)</li><li>number of uses at each subway station and bus stop (this is probably too many attributes if each station and stop is a separate attribute--you'd need a way to deal with this problem)</li></ul><h4>Database 2: Customer-level information</h4><ul><li>email address and phone number (taken from Weekender or Alert email signup)</li><li>customer name (taken from Weekender or Alert email signup form)</li><li>home zip code (taken from Weekender or Alert email signup form--this attribute is not currently present but should be added)</li></ul><p>From matching on customer name and proximity of a frequent swipe location or MetroCard purchase/refill location to home zip code, the MTA could then approximately ID customers based on name and location. Now the MTA would have customer-level information matching an email contact with the subway stations or bus stops they most often travel from, how often they ride buses and subways, when they ride buses and subways, and what kind of MetroCard they use. Additionally, the MTA could extrapolate income level based on what stations and stops customers travel from, their home zip code, and their MetroCard type.
+
+	<p>The MTA could then send tailored messages based on these attributes. For example:</p><ul><li>Frequently-used stations: I ride from Greenwich Village often, so I could get an email or text saying that the N train will be running express between Canal and Grand Central Station weeknights next week.</li><li>Estimated time of day customer uses public transit: If bus service is going to be expanded overnight on a line the MTA knows is near a line a customer frequently rides between 2-3am, it could email or text a customer about the change.</li></ul>
+
+	<p>The MTA could probably send messages on additional attributes as well. In any case, messages like the ones above would be much appreciated by customers and give them a closer connection to the MTA, helping start to change MTA's brand from performance-based to relationship-based.
+
+	<p>The MTA has persistently shown itself to be inventive in its high tech-based marketing, rolling out cool features like BusTime and releasing absolutely stunning photos on Flickr, and creating strong relationships with New York's tech community by opening up the RFP process, hosting hackathons, and releasing APIs to the public. Personalized alerts would be one way to take this success one step further and make a difference in the lives of millions of New Yorkers.
+
+{% endblock %}

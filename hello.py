@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 
 ### posts not to index in list of blog posts
-not_blog_posts = set(['index.html', 'base.html', 'hello.html'])
+not_blog_posts = set(['index.html', 'base.html', 'hello.html', 'old-website-build.html', 'blog-post-template.html'])
 
 
 ### start functions for displaying blog post information ###
@@ -75,6 +75,7 @@ def get_article_description(article_printout):
 
 
 ### run the functions for displaying blog post information ###
+### change this when staging the website!!! ###
 blog_posts_and_paths = top_level("C:/Users/IBM_ADMIN/Documents/flaskapp/templates/")
 
 

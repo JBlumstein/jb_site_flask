@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}CSS3 Has a Ton of Cool Features. Can we start using them?{% endblock %}
+
+{% block description %}In the future, CSS3 will allow developers to build CSS-only animations and gradients, allow for the mixing of pixels and percentages, and make the box model more flexible. Is the future now?{% endblock %}
+
+{% block page_content %}
+
+	<h1>{{ self.title() }}</h1>
+
+	<h2 id="date">2013-10-27</h2>
+
+	<p>This morning, I read an interesting article on <a href="http://tutorialzine.com/2013/10/12-awesome-css3-features-you-can-finally-use/">Tutorialzine</a> that said, basically, CSS3 is here, and it's really, really cool.
+
+	<p>No one will dispute that CSS3 will have a huge effect on front end web development (read on...), but whether CSS3 elements can currently be implemented without Javascript-based fallbacks or graceful degradations is unclear. As the article, <a href="http://tutorialzine.com/2013/10/12-awesome-css3-features-you-can-finally-use/">12 Awesome CSS3 Features That You Can Finally Start Using</a>, points out, none of these elements are supported by Internet Explorer (IE) 8 and many of them aren't supported by IE9. This may not seem like a big deal (no one who's <em>cool</em> is using these old, slow, and buggy browsers), but IE8 and IE9 do need to be accommodated for. IE8 is still <a href="http://gs.statcounter.com/#browser_version_partially_combined-ww-monthly-201309-201310">9% of worldwide browser usage</a>, and accounts for a significantly higher percent of usage on corporate and government machines. IE9 is an additional 5% of worldwide browser usage. 
+
+	<p>Despite the IE support problem, the future of CSS(3) is bright. Soon, we'll be able to build CSS-only animations, content generated on mouseover, and gradients that run on all browsers. Even more exciting are features that make CSS more intuitive, like box-sizing (which simplifies the box model by making the border part of the box instead of outside it), calc() (which will allow you to mix pixels and percentages), and columns (which will allow you to have text automatically flow from one column to another, creating a print newspaper or magazine-style reading experience).
+
+	<p>Whether these new features will stop the flow of web designers abandoning straight CSS for pre-processers like SASS and LESS is an open question. However, the fact the simple fact that these features will make CSS more powerful and could change the general perception that CSS is hard to use and simply un-fun is important. As front end development becomes more complex, with a greater number of devices and screen resolutions to support, developers should at least be able to get some additional programming joy from their work.
+
+{% endblock page_content %}

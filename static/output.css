@@ -30,9 +30,14 @@ body {
       .nav_container .nav_sizer nav li {
         text-align: left;
         display: inline-block;
-        margin-right: 1em; }
+        margin-right: 1.3em; }
       .nav_container .nav_sizer nav a {
         color: #fff; }
+      .nav_container .nav_sizer nav .myname {
+        font-weight: bold;
+        font-size: 1.3em; }
+        .nav_container .nav_sizer nav .myname a {
+          text-decoration: none; }
 
 .page_container {
   width: 100%;

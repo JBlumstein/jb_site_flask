@@ -43,11 +43,20 @@ body {
 			li {
 				text-align: left;
 				display: inline-block;
-				margin-right: 1em;
+				margin-right: 1.3em;
 			}
 
 			a {
 				color: #fff;
+			}
+
+			.myname {
+				font-weight: bold;
+				font-size: 1.3em;
+
+				a {
+			  		text-decoration: none;
+			  	}
 			}
 		}
 	}

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Building this website{% endblock %}
+
+{% block description %}There's no more appropriate place to kick off this blog than with a piece on how I built the the website that houses it.{% endblock %}
+
+{% block page_content %}
+
+	<h1>{{ self.title() }}</h1>
+
+	<h2 id="date">2013-08-18</h2>
+
+	<p>Hello world! Welcome to my new blog on my new website, <a href="http://www.blumste.in">blumste.in</a>. There's no more appropriate place to kick off this blog than with a piece on how I built the the website that houses it.
+
+	<h3>The origins</h3>
+
+	<p>The impetus to build a new portfolio page began with a course on Ruby on Rails I took at <a href="https://generalassemb.ly/">General Assembly</a> this spring. Under the instruction of <a href="https://twitter.com/_StevenNunez">Steven Nunez</a>, I learned how to create Ruby apps on the command line and deployed my first Rails app on Heroku. As I worked through the assignments for the class, I realized that I'd like to take on a larger, more comprehensive project. Rebooting my personal page was a perfect candidate, as I've wanted to update the design and add blogging functions for months.
+
+	<p>When I left my job this summer to take some time off before I begin business school in the fall (actually, tomorrow), I finally had time to take on this project.
+
+	<h3>The execution</h3>
+
+	<p>I spent about three weeks building blumste.in: one planning, one building the Rails back end, and one working on the front end.
+
+	<p>I think the smartest decision I made in building this website was to start with an entire week where I barely touched a piece of code. During this week, I was visiting the always-wonderful <a href="http://www.scottcolecoaching.com/">Scott Cole</a>, Anna Schindler, and Liz Wheatley in Oakland and San Francisco. Each morning, they'd leave for work, and I'd get to work. 
+
+	<p>At seemingly every coffee shop in the Bay Area, I planned out the features I wanted to include, and how I would implement them. In a notebook, I wrote down a list of features and relevant gems, drew out models, and thought about what my controllers would look like. I also sketched out by hand what I wanted each page on the website to look like, from the front page down to the page for a single blog post.
+
+	<p>In week two, back in New York, I dived in to Rails. It was a great learning experience to spend hours a day just thinking about how to make all of the plans I'd put down in my notebook a reality. I dug further into controllers, routing and gems than I ever thought I'd have an opportunity to. I became comfortable with parameters and learned about Ruby-provided features like simple_format. There was a lot of googling and Stack Overflow involved.
+
+	<p>The final week saw me back on my home turf, front end web design, which I've been dabbling in for about three years now. However, implementing the front end on a Rails app turned out to be very different than anything I'd done previously, and a fun challenge. I worked with SASS for the first time (amazing!), chained Ruby methods to better to organize dynamic content, and thought a lot about how to style blocks of dynamically generated content in otherwise static pages. I also tussled with Git, Heroku, and a hosting company for an afternoon to get the site up and running, and to get the custom domain name set up.
+
+	<h3>The victory dance</h3>
+
+	<p>In the end, I'm happy with how this site turned out. I had three weeks in which to build it, and I made my deadline with a product that I'm proud of. There's still some work to do in the coming days: I want to better organize readings and blog posts, consolidate inline styles into CSS classes, maybe make the front page a little spiffier and add a tag cloud to the blog page, and put all the code for this site on to Github.
+
+	<p>Ultimately, and most importantly, I learned a lot, from how to plan out websites, starting with pen and paper, to specific technologies such as Rails and SASS. I also learned what I'd like to dive into more ( Rails, SASS, working with APIs, and asynchronous JavaScript). Finally, I learned that a programmer's work is never done. There will always be a piece of code to clean up or a feature to add. Not only is that OK, it's exciting. There's always more to do and more to learn.

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}I Heart #NYCTECH{% endblock %}
+
+{% block description %}My awesome week in New York City Tech. Featuring inspiration from Alexis Ohanian!{% endblock %}
+
+{% block page_content %}
+
+	<h1>{{ self.title() }}</h1>
+
+	<h2 id="date">2013-10-10</h2>
+
+	<p>#NYCTech has gotten a lot of love over the last few years, but I'm going to quickly add a concurring opinion on how awesome this scene is.
+
+	<p>A couple examples from this week:
+	<ul style="list-style-type:none;">
+
+	<li>On Monday, I saw Alexis Ohanian (co-founder of <a href="http://www.reddit.com">Reddit</a>) speak at Stern. He spoke to a full room and made an effort to have a one-on-one conversation with every audience member who wanted one afterwards. Alexis's suggestion for me: get experience working with other designers and developers by signing up for Hackathons. My sleep deficit is growing (first semester of business school is absolutely nuts), but I might have to put it into overdrive by staying up all night on a group project.</li>
+
+	<li>On Tuesday, I went to <a href="http://nytm.org/">New York Tech Meetup</a>, which, as always, packed NYU's enormous Skirball Auditorium. The projects were amazingly varied and included everything from a visual diary platform (<a href="http://days.am">days.am</a>) to enterprise software for retail businesses to book appointments with customers (<a href="http://skedge.me">skedge.me</a>). At the reception afterwards I had interesting and friendly conversations with bootstrapping start-up founders, product managers at large financial services firms, and engineers from a major online media outlet.</li>
+
+	</ul>
+
+	<p>These events re-enforced my perception that #NYCTech is on the move. For more proof, the Hacker News <a href="https://news.ycombinator.com/item?id=6475879">who's hiring thread</a> from last week shows how tech is growing here&mdash;it has job postings from a <strong>lot</strong> of NY-based companies (Quovo, Percolate, Enigma, the Huffington Post, Blue Apron, Harry's, Code Academy, Amicus, Zipmark, Eponymous, and more!).
+
+{% endblock page_content %}
