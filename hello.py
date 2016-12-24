@@ -1,6 +1,7 @@
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 import os, sys
 import re
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -14,6 +15,7 @@ def top_level(folder):
 		if jonahs_blog_post not in not_blog_posts:
 			one_post_data = get_post_data(folder, jonahs_blog_post)
 			posts_data.append(one_post_data)
+	posts_data = sorted(posts_data, key=lambda k: k['date'], reverse=True) 
 	return posts_data
 
 def get_post_names(path):
@@ -28,6 +30,7 @@ def get_post_data(folder, post):
 	printed_article = print_article(folder, post)
 	title = get_article_title(printed_article)
 	date = get_article_date(printed_article)
+	date = datetime.strptime(date, '%Y-%m-%d').date()
 	post_data = {'post':post, 'stub':stub, 'url_path':url_path, 'title': title, 'date': date}
 	return post_data
 
