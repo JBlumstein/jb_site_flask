@@ -75,8 +75,10 @@ def get_article_description(article_printout):
 
 
 ### run the functions for displaying blog post information ###
-### change this when staging the website!!! ###
-blog_posts_and_paths = top_level("C:/Users/IBM_ADMIN/Documents/flaskapp/templates/")
+### for local ###
+#blog_posts_and_paths = top_level("C:/Users/IBM_ADMIN/Documents/flaskapp/templates/")
+### for staging ###
+blog_posts_and_paths = top_level("/templates/")
 
 
 ### routing ###
