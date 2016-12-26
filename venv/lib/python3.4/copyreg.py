@@ -1,0 +1,1 @@
+/Users/jonahblumstein/anaconda/lib/python3.4/copyreg.py
