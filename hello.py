@@ -78,7 +78,7 @@ def get_article_description(article_printout):
 ### for local ###
 #blog_posts_and_paths = top_level("C:/Users/IBM_ADMIN/Documents/flaskapp/templates/")
 ### for staging ###
-blog_posts_and_paths = top_level("/app/templates/")
+blog_posts_and_paths = top_level("/app/templates")
 
 
 ### routing ###
@@ -87,11 +87,6 @@ blog_posts_and_paths = top_level("/app/templates/")
 def index():
 	'''render template for index page'''
 	return render_template('index.html', blog_posts=blog_posts_and_paths)
-
-@app.route('/resume')
-def load_resume():
-	'''render template for resume page'''
-	return render_template('resume.html')
 
 @app.route("/blog/<string:blog_post_short_name>/")
 def render_one_post(blog_post_short_name):
