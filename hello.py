@@ -45,7 +45,10 @@ def get_post_data(folder, post):
 
 def print_article(folder, article):
 	'''Print out article's jinja template as a string'''
-	full_article_path = '/app/templates/' + article
+	###if local use this:
+	full_article_path = folder + article
+	###if staging use this:
+	#full_article_path = '/app/templates/' + article
 	with open(full_article_path, 'r') as myfile:
 		printed_article=myfile.read()
 		return printed_article
