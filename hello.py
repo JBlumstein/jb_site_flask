@@ -78,7 +78,7 @@ def get_article_description(article_printout):
 ### for local ###
 #blog_posts_and_paths = top_level("C:/Users/IBM_ADMIN/Documents/flaskapp/templates/")
 ### for staging ###
-blog_posts_and_paths = top_level("/app/templates")
+blog_posts_and_paths = top_level("/app/templates/")
 
 
 ### routing ###
