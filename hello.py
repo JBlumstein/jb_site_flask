@@ -18,8 +18,11 @@ def top_level(folder):
 	posts_data = []
 	for jonahs_blog_post in jonahs_blog_posts:
 		if jonahs_blog_post not in not_blog_posts:
-			one_post_data = get_post_data(folder, jonahs_blog_post)
-			posts_data.append(one_post_data)
+			try:
+				one_post_data = get_post_data(folder, jonahs_blog_post)
+				posts_data.append(one_post_data)
+			except:
+				continue
 	posts_data = sorted(posts_data, key=lambda k: k['date'], reverse=True) 
 	return posts_data
 
