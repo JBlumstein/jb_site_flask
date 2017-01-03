@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}New Year, New Blumste.in{% endblock %}
+
+{% block description %}Rewriting my personal website in Flask and SASS{% endblock %}
+
+{% block page_content %}
+
+	<h1>{{ self.title() }}</h1>
+
+	<h2 id="date">2017-01-02</h2>
+
+	<p>See the github repo for my new personal website <a href="https://github.com/JBlumstein/jb_site_flask/">here</a>.</p>
+
+	<hr>
+
+	<p>With the last two weeks off from work in 2016, I decided to move from the data science projects I've focused on in the second half of 2016 (see <a href="http://blumste.in/blog/pitchfork">here</a>, <a href="http://blumste.in/blog/parking">here</a>, <a href="http://blumste.in/blog/amnh">here</a>, and <a href="http://blumste.in/blog/group-reduce">here</a>) and instead re-implement my personal website in Flask and SASS.
+
+	<h3>On Magic (or Why Do This)</h3>
+
+	<p>My old website was a Rails app with a Bootstrap front end I built shortly after taking a night class at General Assembly in mid-2013. I was and am proud of the work I did on it, but I had been increasingly frustrated with it because it was difficult to make changes to. That meant that I couldn't (easily) get rid of the buggy 3rd-party CMS I was using, create new functionalities easily, or update the look and feel of the site.
+
+	<p>My struggles stemmed from a frequent (albeit not entirely fair) critique of both Rails and Bootstrap: working with them lulls the developer into making decisions they don't fully understand. For better and worse, using Rails and Bootstrap allowed me to build a lot of stuff out of the box with minimal understanding of what I was really doing, but because I didn't quite understand how everything worked I couldn't make changes to the site with confidence.
+
+	<h3>This Time Around</h3>
+
+	<p>This time around, I decided to go with a minimal magic approach.</p>
+
+	<ol>
+		<li>I used the language I was most comfortable with, Python, and the most bare-bones popular framework in that language, Flask.</li>
+		<li>Since I've always preferred marking up my text by hand, I skipped using a CMS.</li>
+		<li>I've decided to serve static files instead of using a database.</li>
+		<li>Because I'm serving static files, I don't need any sort of admin panel, which means I don't need any permissions functionality.</li>
+		<li>I wrote the stylesheet by hand in SASS, meaning I can change things easily and without having to grok the lexicon of a front-end framework.</li>
+		<li>I'm not using any javascript, because after all these years I still don't know much javascript and it's not necessary for a basic personal page.</li>
+	</ol>
+
+	<h3>How the No Magic Approach Makes It Easy to Build Things</h3>
+
+	<p>The no-magic approach made it easy for me to implement the one novel piece of functionality on the website: the list of blog posts on the front page, ordered by date. All that's happening there is that I'm using the listdir function from the Python OS library to find all my views, minus a list of views I've designated Do-Not-Index, then opening each of those files and reading through them as text files. Using regex on those readouts, I pull the article title, date, and summary and put them into a dictionary within a list of dictionaries (one dictionary per blog post). I then use the datetime library to convert the article dates from string to date format, and then sort the list of dictionaries by article date.
+
+	<h3>So What Now?</h3>
+
+	<p>Good question. This website was surprisingly easy to build, so I might go ahead and implement a few more basic features, like a general blog posts page, blog post tags, and a more extensive resume/about me page. The important thing is I can now make any changes with relative ease.
+
+{% endblock %}

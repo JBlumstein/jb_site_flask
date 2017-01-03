@@ -18,8 +18,11 @@ def top_level(folder):
 	posts_data = []
 	for jonahs_blog_post in jonahs_blog_posts:
 		if jonahs_blog_post not in not_blog_posts:
-			one_post_data = get_post_data(folder, jonahs_blog_post)
-			posts_data.append(one_post_data)
+			try:
+				one_post_data = get_post_data(folder, jonahs_blog_post)
+				posts_data.append(one_post_data)
+			except:
+				continue
 	posts_data = sorted(posts_data, key=lambda k: k['date'], reverse=True) 
 	return posts_data
 
@@ -75,11 +78,12 @@ def get_article_description(article_printout):
 
 
 ### run the functions for displaying blog post information ###
-### for local ###
+### for local on PC###
 #blog_posts_and_paths = top_level("C:/Users/IBM_ADMIN/Documents/flaskapp/templates/")
+### for local on mac###
+#blog_posts_and_paths = top_level("/Users/jonahblumstein/Documents/flaskapp")
 ### for staging ###
-blog_posts_and_paths = top_level("/templates/")
-
+blog_posts_and_paths = top_level("/app/templates/")
 
 ### routing ###
 
@@ -87,11 +91,6 @@ blog_posts_and_paths = top_level("/templates/")
 def index():
 	'''render template for index page'''
 	return render_template('index.html', blog_posts=blog_posts_and_paths)
-
-@app.route('/resume')
-def load_resume():
-	'''render template for resume page'''
-	return render_template('resume.html')
 
 @app.route("/blog/<string:blog_post_short_name>/")
 def render_one_post(blog_post_short_name):

@@ -1,6 +1,0 @@
-<<<<<<< HEAD
-python-3.6.0
-=======
-Flask==0.10.1
-virtualenv==15.0.1
->>>>>>> 574ca86d992ac41b5301c4a59b97f20b5d3a2d6f
