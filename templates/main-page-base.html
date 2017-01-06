@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %} - Jonah Blumstein</title>
+    <meta name="description" content="{% block description %}{% endblock %}" />
+    <meta name="keywords" content="Jonah Blumstein, {% block tags %}{% endblock %}">
+    <meta name="date" content="{% block date %}{% endblock %}" scheme="YYYY-MM-DD">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='output.css') }}">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,600italic,700,700italic,300italic' rel='stylesheet' type='text/css'>
+    <link rel="icon" type="image/gif" href="http://jonahblumstein.net/jbheadshotfavicon.gif">
+</head>
+<body>
+	<div class="nav_container">
+		<div class="nav_sizer">
+			<nav>
+				<div class="menu_container">
+					<ul>
+						<li class="myname"><a href="/">Jonah Blumstein</a></li>
+						<li><a href="/">Bio / Home</a></li>
+						<li><a href="mailto:jonah.blumstein@gmail.com">Contact</a></li>
+					</ul>
+				</div>
+			</nav>
+		</div>
+	</div>
+	<div class="page_container">
+		<div class="page">
+			{% block page_content %}
+			{% endblock page_content%}
+		</div>
+	</div>
+</body>
+</html>
