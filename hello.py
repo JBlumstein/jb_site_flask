@@ -54,7 +54,7 @@ def print_article(folder, article):
 		return printed_article
 
 def get_article_attribute(article_printout, attribute, fallback):
-	'''get article article from article as string'''
+	'''get article attributes from article as string'''
 	search_string = '\{% block ' + attribute + ' %}(.+?)\{% endblock %}.*?'
 	try:
 		article_attribute = re.findall(search_string, article_printout)[0]
@@ -89,5 +89,4 @@ def render_one_post(blog_post_short_name):
 @app.route("/blog_posts_tagged:<string:tag>/")
 def render_list_of_tagged_posts(tag):
 	'''render index page with posts with desired tag'''
-	tag_with_spaces = tag.replace('+',' ')
 	return render_template('index-with-tagged-posts.html', blog_posts=blog_posts_and_paths, tag=tag)
