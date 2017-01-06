@@ -23,8 +23,12 @@ def top_level(folder):
 				posts_data.append(one_post_data)
 			except:
 				continue
-	posts_data = sorted(posts_data, key=lambda k: k['date'], reverse=True) 
-	return posts_data
+	posts_data = sorted(posts_data, key=lambda k: k['date'], reverse=True)
+	posts_tags = get_tags(posts_data)
+	tag_counts = get_tag_counts(posts_tags)
+	top_tag_counts = list(tag_count for tag_count in tag_counts if tag_count['tag_count']>=3)
+	top_tag_counts = sorted(top_tag_counts, key=lambda k: k['tag_count'], reverse=True)
+	return posts_data, top_tag_counts
 
 def get_post_names(path):
 	'''get a list of posts from a folder'''
@@ -62,29 +66,46 @@ def get_article_attribute(article_printout, attribute, fallback):
 		article_attribute = fallback
 	return article_attribute
 
+def get_tags(all_posts_data):
+	'''extract a list of all tags for posts'''
+	all_post_tags = []
+	for one_post_data in all_posts_data:
+		one_post_tags = list(one_post_data['tags'])
+		all_post_tags.extend(one_post_tags)
+	return all_post_tags
+
+def get_tag_counts(all_tags):
+	'''create a dict with each tag and the number of times that tag is used'''
+	all_tags_data = []
+	unique_tags = set(all_tags)
+	for tag in unique_tags:
+		tag_data = {'tag_name': tag, 'tag_count': all_tags.count(tag)}
+		all_tags_data.append(tag_data)
+	return all_tags_data
+
 ### end functions for displaying blog post information ###
 
 
 ### run the functions for displaying blog post information ###
 ### for local on PC###
-#blog_posts_and_paths = top_level("C:/Users/IBM_ADMIN/Documents/flaskapp/templates/")
+blog_posts_and_paths, tags_and_counts = top_level("C:/Users/IBM_ADMIN/Documents/flaskapp/templates/")
 ### for local on mac###
-#blog_posts_and_paths = top_level("/Users/jonahblumstein/Documents/flaskapp")
+#blog_posts_and_paths, tags_and_counts = top_level("/Users/jonahblumstein/Documents/flaskapp")
 ### for staging ###
-blog_posts_and_paths = top_level("/app/templates/")
+#blog_posts_and_paths, tags_and_counts = top_level("/app/templates/")
 
 ### routing ###
 
 @app.route('/')
 def index():
 	'''render template for index page'''
-	return render_template('index.html', blog_posts=blog_posts_and_paths)
+	return render_template('index.html', blog_posts=blog_posts_and_paths, tags_and_counts=tags_and_counts)
 
 @app.route("/blog/<string:blog_post_short_name>/")
 def render_one_post(blog_post_short_name):
 	'''render blog posts'''
 	if blog_post_short_name + '.html' not in not_blog_posts:
-		return render_template('%s.html' % blog_post_short_name)
+		return render_template('%s.html' % blog_post_short_name, tags_and_counts=tags_and_counts)
 
 @app.route("/blog_posts_tagged:<string:tag>/")
 def render_list_of_tagged_posts(tag):

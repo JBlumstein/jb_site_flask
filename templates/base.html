@@ -29,6 +29,9 @@
 			<h2 id="date">{{ self.date() }}</h2>
 			{% block page_content %}
 			{% endblock page_content%}
+			<hr>
+			<p>Tags: {% for one_tag in tags_and_counts %}<a href="/blog_posts_tagged:{{ one_tag.tag_name }}/">{{ one_tag.tag_name }}</a>{% if not loop.last %}, {% endif %}{% endfor %}</p>
+			<p>[<a href="/">Return Home</a>]
 		</div>
 	</div>
 </body>
