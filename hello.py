@@ -88,11 +88,11 @@ def get_tag_counts(all_tags):
 
 ### run the functions for displaying blog post information ###
 ### for local on PC###
-blog_posts_and_paths, tags_and_counts = top_level("C:/Users/IBM_ADMIN/Documents/flaskapp/templates/")
+#blog_posts_and_paths, tags_and_counts = top_level("C:/Users/IBM_ADMIN/Documents/flaskapp/templates/")
 ### for local on mac###
 #blog_posts_and_paths, tags_and_counts = top_level("/Users/jonahblumstein/Documents/flaskapp")
 ### for staging ###
-#blog_posts_and_paths, tags_and_counts = top_level("/app/templates/")
+blog_posts_and_paths, tags_and_counts = top_level("/app/templates/")
 
 ### routing ###
 
