@@ -105,7 +105,8 @@ def index():
 def render_one_post(blog_post_short_name):
 	'''render blog posts'''
 	if blog_post_short_name + '.html' not in not_blog_posts:
-		return render_template('%s.html' % blog_post_short_name, tags_and_counts=tags_and_counts)
+		single_post_tags = list(item['tags'] for item in blog_posts_and_paths if item['stub'] == blog_post_short_name)[0]
+		return render_template('%s.html' % blog_post_short_name, single_post_tags=single_post_tags)
 
 @app.route("/blog_posts_tagged:<string:tag>/")
 def render_list_of_tagged_posts(tag):
