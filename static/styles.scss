@@ -2,7 +2,7 @@ $font-stack:       "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 $primary-color:    #333;
 $background-color: #fff8e7;
 $jonah-picture-width: 10em;
-$page-width: 1000px;
+$page-width: 800px;
 
 body {
 	font: 100% $font-stack;
@@ -22,7 +22,7 @@ body {
 	padding: 0;
 
 	.nav_sizer {
-		max-width: 1000px;
+		max-width: $page-width;
 		margin: 0 auto;
 
 		nav {
