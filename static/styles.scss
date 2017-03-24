@@ -1,6 +1,6 @@
 $font-stack:       "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 $primary-color:    #333;
-$background-color: #fff8e7;
+$background-color: #f9f9f9;
 $jonah-picture-width: 10em;
 $page-width: 800px;
 
@@ -17,7 +17,7 @@ body {
 	margin: 0 0 0 0;
 	top: 0;
 	left: 0;
-	background: #020e3b;
+	background: #353535;
 	text-align: center;
 	padding: 0;
 
@@ -74,6 +74,7 @@ body {
 .page {
 	max-width: $page-width;
 	padding: 2em 0 2em 0;
+	line-height: 1.7em;
 
 	hr {
 		border-top: 1px dashed #8c8b8b;
