@@ -112,3 +112,11 @@ def render_one_post(blog_post_short_name):
 def render_list_of_tagged_posts(tag):
 	'''render index page with posts with desired tag'''
 	return render_template('index-with-tagged-posts.html', blog_posts=blog_posts_and_paths, tag=tag)
+
+@app.route('/video2minutes')
+def video2minutes():
+	return redirect("https://www.youtube.com/watch?v=yuoW5wFU2Ks")
+
+@app.route('/video15minutes')
+def video15minutes():
+	return redirect("https://youtu.be/aiwFm6MiPqY")
