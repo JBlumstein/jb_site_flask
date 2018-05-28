@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Time for Revisions{% endblock %}
+
+{% block description %}What I learn by rewritng code{% endblock %}
+
+{% block tags %}programming, python, spark{% endblock %}">
+
+{% block date %}2018-05-28{% endblock %}">
+
+{% block page_content %}
+
+	<p>I'll admit, I'm not in the habit of rewriting code. Working as a consultant on tight project timelines and focusing on proof-of-concept projects means that there is often little opportunity to revisit / revise my work.</p>
+
+	<p>However, on the occasions that I do get to go back to something I've written earlier, I find the reflection allows me to clarify my thinking at high (data structure), medium (code structure), and low (code implementation) levels.</p>
+
+	<p>An example comes from the past few days. Earlier this week, I was given a quick task: pull some data stored in AWS buckets on a Spark cluster at a daily level, filter the data for each day on a few conditions, combine the output, and then aggregate a specific field for unique values at a monthly and annual level.</p>
+
+	<p>This ask is fairly straightforward. However, I've spent the last few months working in R instead of Python (and didn't have permission or time to set up SparklyR on the server) and haven't touched Spark in the same amount of time. As a result, I ended up fumbling around with PySpark commands for a short while before pushing everything to Pandas (where I'm more comfortable) and aggregating there.</p>
+
+	<p>It's a workflow that got the job done, but it was unsatisfying: the code was slow, longer than necessary, and involved an entire paradigm of Python programming (Pandas) for no particularly good reason.</p>
+
+	<p>So this weekend, between a long run at a state park and a meal (and a beer) with friends, I went back to the code I had written. I stripped out everything Pandas and replaced it with PySpark dataframe and base PySpark operations. My data went from being stored in multiple Pandas dataframes to a single dictionary. I also cleaned up some quick-and-dirty code to make it more Pythonic. The resulting code was improved in numerous ways: half as many lines, significantly faster, easier to read, and more idiomatic to Python and PySpark.</p>
+
+	<p>I feel like having undertaken this exercise has made me a better programmer. I suppose there's a small lesson for myself here: while in the rush of the day-to-day, it can hard to learn how to pick up new concepts beyond a certain limited extent; going back and rewriting code under fewer time constraints is a good way to learn how to do things the right way and skill up for when I'm under the usual time pressure in the future.</p>
+
+{% endblock %}
