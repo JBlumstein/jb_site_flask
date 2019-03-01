@@ -1,4 +1,4 @@
-from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
+from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash, send_from_directory
 import os, sys
 import re
 from datetime import datetime
@@ -87,12 +87,12 @@ def get_tag_counts(all_tags):
 
 
 ### run the functions for displaying blog post information ###
-### for local on PC###
-#blog_posts_and_paths, tags_and_counts = top_level("C:/Users/IBM_ADMIN/Documents/flaskapp/templates/")
-### for local on mac###
+### for local on IBM mac###
+blog_posts_and_paths, tags_and_counts = top_level("/Users/jblumst@us.ibm.com/Documents/personal_website/jb_site_flask/templates/")
+### for local on personal mac###
 #blog_posts_and_paths, tags_and_counts = top_level("/Users/jonahblumstein/Documents/flaskapp")
 ### for staging ###
-blog_posts_and_paths, tags_and_counts = top_level("/app/templates/")
+# blog_posts_and_paths, tags_and_counts = top_level("/app/templates/")
 
 ### routing ###
 
@@ -100,6 +100,10 @@ blog_posts_and_paths, tags_and_counts = top_level("/app/templates/")
 def index():
 	'''render template for index page'''
 	return render_template('index.html', blog_posts=blog_posts_and_paths, tags_and_counts=tags_and_counts)
+
+@app.route("/etc/<path:filename>")
+def download_file(filename):
+    return send_from_directory('html_static', filename)
 
 @app.route("/blog/<string:blog_post_short_name>/")
 def render_one_post(blog_post_short_name):
