@@ -90,7 +90,7 @@ def get_tag_counts(all_tags):
 ### for local on IBM mac###
 # blog_posts_and_paths, tags_and_counts = top_level("/Users/jblumst@us.ibm.com/Documents/personal_website/jb_site_flask/templates/")
 ### for local on personal mac###
-blog_posts_and_paths, tags_and_counts = top_level("/Users/jonahblumstein/Documents/flaskapp")
+blog_posts_and_paths, tags_and_counts = top_level("/Users/jonahblumstein/Documents/jb_site_flask")
 ### for staging ###
 # blog_posts_and_paths, tags_and_counts = top_level("/app/templates/")
 
