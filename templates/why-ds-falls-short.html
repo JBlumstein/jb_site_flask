@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Falling Into The Gap{% endblock %}
+
+{% block description %}Why data science projects fall short of expectations, and what to do about it{% endblock %}
+
+{% block tags %}data science, strategy{% endblock %}">
+
+{% block date %}2020-11-11{% endblock %}">
+
+{% block page_content %}
+
+    <p>All-too-often organizations struggle to integrate data science into digital products, due to a persistent gap between the skill set most data scientists have, and what it takes to build software in 2020. 
+
+    <p>In this blog post, I'll discuss why this gap exists and a couple ways of overcoming it.
+
+    <hr>
+
+    <h3>Part I: The Gap</h3>
+
+    <p>To better understand the gap between the skills data scientists hold and the skills they need to deploy software, let's start by answering a simple question: who are data scientists in 2020?
+
+    <p>Data scientists most often come out of 
+    <ol>
+    <li>a PhD program,</li>
+    <li>an analytics or information management or statistics masters program, or</li>
+    <li>a data science bootcamp.</li>
+    </ol>
+
+    <p>All these sources create data scientists with at least a basic understanding of statistics and oftentimes awareness of what methods should be used to analyze what common problems. However, what none of these do consistently is teach either software skills or business understanding. When it comes to software skills there might be a class on object oriented program, but usually nothing on software engineering or cloud platforms. And none of these practitioners will have taken coursework in industry business models, marketing, or operations.
+
+    <p>Now think about what it takes to deploy software in 2020?
+    <ol>
+    <li>You need software engineering skills, including strong chops in both SQL and a general-purpose programming language like Python, Scala, or Java; version control with Git, unit testing, unix command line basics, the ability to use a debugger properly, and a minimal understanding of CI / CD.</li>
+    <li>You need to know how to deploy software. That means understanding how to use a cloud platform like AWS, GCP, or Azure.</li>
+    </ol>
+
+    <p>The mismatch should be obvious: most data scientists are applied statisticians with better branding. Their modeling capabilities and business understanding vary. But there's almost universally a gulf between what data scientists know about software and what it takes to build it and deploy it properly.
+
+    <p>Before we go on to how to solve for this mismatch, we should talk about its repercussions. What happens when data scientists don't know how to build software, and organizations don't take the often large amounts of time and energy necessary to train them on how to do it?
+
+    <p>Usually, they'll be thrown into a software engineering or data engineering team, where they'll struggle for a long, long time. They'll have trouble writing code outside of notebooks, writing code that passes code coverage and other tests set up in CI / CD, and getting code that works locally to work reliably on a cloud platform. 
+
+    <p>A few things can happen then:
+    <ol>
+    <li>If the data scientist doesn't throw up their hands in frustration, after many months, oftentime half a year, they can own ML pipelines independently.</li>
+    <li>The data scientist is moved to a reporting team. In the best case, if the data scientist is particularly good at grocking the business, they can do well at answering discrete questions. But then they still have to push through their findings and recommendations to the business, leading to many suggestions getting left on the shelf. In the more common case, you've know got a particularly expensive analyst who doesn't understand the business as well as their colleagues. I've even heard of a major financial services player where they removed data scientists from many of their analyst teams because they weren't creating as much value as people who only knew SQL but had been with the company for years and had a finance background.</li>
+    <li>A data scientist / ML engineer split can be attempted. Here a data scientist hacks away at a model in a notebook and delivers it to an ML engineer, who knows a bit of statistics and has software engineering skills, who cleans it up and puts it into production. However, you've now hired two folks at a six figure salary, including an ML engineer who might prefer to be building his own models to put into production rather than someone else's. There are also dangers here in terms of the specifics of a model getting lost in translation as they're passed from the data scientist to the ML engineer.</li>
+    </ol>
+
+    <p>In short, you either don't put the model into production, wait a very long time to put the model into production, or put the model into production (with risks of getting it wrong) at double the price.
+
+    <hr>
+
+    <h3>Part II: Climbing Out of the Gap</h3>
+
+    <p>Now let's talk about how to deal with this mismatch and mitigate everything I was just warning about. Because nearly no data scientists are coming in with the full necessary skill set to deploy software, you realistically have 2 options for acquiring data scientists who can contribute to digital products:
+    <ol>
+    <li>Hire data scientists who have some of the skills needed and train them on the rest OR</li>
+    <li>Work with an external service provider who builds the product for you</li>
+    </ol>
+
+    <p>We'll talk about each of these, and then about how to make a decision between them. In short, there are a lot of tradeoffs.
+
+    <p>Let's start with hire and train. In order to hire and train data scientists you need to have
+    <ol>
+    <li>a plan for hiring folks who are close to ready to contribute, and</li>
+    <li>a plan for training them on the remaining skills</li>
+    </ol>
+
+    <p>On the hiring portion you can include software engineering and cloud platform skills in the requirements portion of a JD and ask questions about software engineering and your company's cloud platform during candidate interviews. Because every engineering organization's systems and tools are different, general knowledge is often good enough to cut time to pushing to prod in maybe half, compared to a similar data scientist without knowledge of software engineering or cloud platforms.
+
+    <p>Then there's training. You'll need more documentation on your version control, your unit testing tool, your CI/CD tool, and your cloud platform's major services. All this in addition to specific documentation on your data systems and data model. Furthermore, data engineers and senior data scientists will need to spend time with new hires in order to get them up to speed, which is more difficult in a distributed organization (all of us right now) than when the whole team sits together.
+
+    <p>The good news is that careful hiring and training can cut time to pushing reliably to prod to a month or two.
+
+    <p>The other option is to contract with outside talent, either through supplementing your team with contractors (usually on an hourly basis) or an experienced team from an external service provider (usually on a time and materials or fixed cost basis).
+
+    <p>This option usually requires either having an existing relationship with a firm that you trust, or taking the time to vet the consultants, agree to specs and work plan, and come to agreement on pricing. It takes a lot less practitioner time, but also a lot more executive time.
+
+    <hr>
+
+    <h3>Part III: Hire and Train, or Contract Out</h3>
+
+    <p>So how to pick between hire and train or contract out? There are a few considerations, including the maturity of your data engineering and data science organizations, your tolerance for variability in time or cost, and your enterprises's resource availability.
+
+    <p>Let's go through each of these decision points one-by-one:
+    <ol>
+    <li>Organizational maturity: in organizations that are more mature, hiring and training new data scientists is easier. The data organization doesn't necessarily have to have a history of data science-driven digital products (although that's helpful); any sufficiently complex data-intensive digital product will do. What the team will have to be able to do is have the ability to integrate either off-the-shelf or bespoke tools for enhancing existing workflows with model-driven capabilities, provide a playbook including in-depth documentation for deploying data science, and be willing to spend a fair amount of time with new data science hires to get them up to speed.</li>
+    <li>Tolerance for variability in time and cost: hire and train is cheaper on average than working with an external service provider, but contains greater variability in time and cost of delivery. You pay a premium working with an external service provider, but the contract, if written correctly, locks in the deliverables and how much you pay for them.</li>
+    <li>Resource availability: One other thing to consider when choosing to hire and train data scientists or contract with an external service provider is resource availability. Hiring and training data scientists takes up a lot of time from your technical practitioners, whereas contracting with an external service provider requires time from technical and non-technical management, as well as legal.</li>
+    </ol>
+
+    <hr>
+
+    <h3>Part IV: Conclusions</h3>
+
+    <p>In the end, while hire and train vs. contract for a data science project or initiative is an important and often difficult decision, either one is nearly guaranteed to ensure a better outcome than leaving your new, expensive data scientists to go it alone. Starting to think about what the best way to build up your data science capability is the first step to getting data science built into your digital products.
+
+{% endblock %}
