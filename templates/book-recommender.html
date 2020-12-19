@@ -46,8 +46,9 @@
     <p>Let&#39;s dig in to it:</p>
     <p>In my deploy_and_run_fargate.sh script, I had to take the following steps:</p>
     <p>Read in environment variables:</p>
-    <pre><code>source <span class="hljs-built_in">config</span>
-    </code></pre><p>Create a name for the container I would use later on for my task:</p>
+    <code>source config
+    </code>
+    <p>Create a name for the container I would use later on for my task:</p>
     <code>dtnow="`date +%Y%m%d%H%M%S`"<br>
     container_name_dt=$container_name-$dtnow</code>
     <p>Create an IAM role to execute my task:</p>
