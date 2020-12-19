@@ -27,38 +27,35 @@
     <h3 id="posting-to-ecr">Posting to ECR</h3>
     <p>To post my docker image to ECR, I built a short shell script, with the following steps:</p>
     <p>Set up, by reading in my environment variables and switching into my container folder (which contains the contents of my docker image):</p>
-    <code>#!/bin/bash<br>
-    source config<br>
-    cd container</code>
-    <p>Next I logged on to AWS:</p>
-    <code>aws ecr get-login-password --region $aws_region | docker login --username AWS --password-stdin $repo_image</code>
-    <p>I then built my repo in ECR:</p>
-    <code>aws ecr create-repository --repository-name $repo_name</code>
-    <p>I next built my image with my argument values (ARGs in my Dockerfile) and tagged it:</p>
-    <code>docker build --build-arg aws_key=$AWSAccessKeyId --build-arg aws_secret=$AWSSecretKey -t $repo_name:$repo_tag . <br>
-    docker tag $repo_name:$repo_tag $repo_image/$repo_name:$repo_tag</code>
-    <p>Finally, I pushed my image to ECR:</p>
-    <code>docker push $repo_image/$repo_name:$repo_tag</code>
-    <p>Here&#39;s my repo on ECR:</p>
+    <pre><code><span class="hljs-meta">#!/bin/bash</span>
+    <span class="hljs-built_in">source</span> config
+    <span class="hljs-built_in">cd</span> container
+    </code></pre><p>Next I logged in to AWS:</p>
+    <pre><code><span class="hljs-string">aws </span><span class="hljs-string">ecr </span><span class="hljs-built_in">get-login-password</span> <span class="hljs-built_in">--region</span> $<span class="hljs-string">aws_region </span>| <span class="hljs-string">docker </span><span class="hljs-string">login </span><span class="hljs-built_in">--username</span> <span class="hljs-string">AWS </span><span class="hljs-built_in">--password-stdin</span> $<span class="hljs-string">repo_image</span>
+    </code></pre><p>I then built my repo in ECR:</p>
+    <pre><code><span class="hljs-string">aws </span><span class="hljs-string">ecr </span><span class="hljs-built_in">create-repository</span> <span class="hljs-built_in">--repository-name</span> $<span class="hljs-string">repo_name</span>
+    </code></pre><p>I next built my image with my argument values (ARGs in my Dockerfile) and tagged it:</p>
+    <pre><code>docker build -<span class="hljs-params">-build</span><span class="hljs-params">-arg</span> aws_key=$AWSAccessKeyId -<span class="hljs-params">-build</span><span class="hljs-params">-arg</span> aws_secret=$AWSSecretKey <span class="hljs-params">-t</span> $repo_name:$repo_tag .
+    docker <span class="hljs-built_in">tag</span> $repo_name:$repo_tag $repo_image/$repo_name:$repo_tag
+    </code></pre><p>Finally, I pushed my image to ECR:</p>
+    <pre><code>docker <span class="hljs-keyword">push</span> $repo_image/$repo_name:$repo_tag
+    </code></pre><p>Here&#39;s my repo on ECR:</p>
     <p><img src="https://github.com/JBlumstein/first-docker-app/blob/main/static/example_ecr.png?raw=true" alt="Alt text"></p>
     <h3 id="running-on-ecs">Running on ECS</h3>
     <p>The toughest part, by a good margin, was figuring out how to run my image, now in ECR, on ECS. In order to simplify things, I used Fargate, but I still needed a fairly lengthy shell script, a json file, and a Python script to build a task definition, to get it done from the CLI.</p>
     <p>Let&#39;s dig in to it:</p>
     <p>In my deploy_and_run_fargate.sh script, I had to take the following steps:</p>
     <p>Read in environment variables:</p>
-    <code>source config
-    </code>
-    <p>Create a name for the container I would use later on for my task:</p>
-    <code>dtnow="`date +%Y%m%d%H%M%S`"<br>
-    container_name_dt=$container_name-$dtnow</code>
-    <p>Create an IAM role to execute my task:</p>
-    <code>aws iam --region $aws_region create-role --role-name $role_name --assume-role-policy-document file://task-execution-assume-role.json<br>
-    aws iam --region $aws_region attach-role-policy --role-name $role_name --policy-arn arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
-    </code>
-    <p>Fill out my task template, using a python script:</p>
-    <code>python3 update_task_definition.py $container_name_dt
-    </code>
-    <p>The python script reads in my environment variables, gives them names during the script runtime, fills out the below dictionary, and saves it to a json file named updated_task_definition.json (not included here because it includes secrets).</p>
+    <pre><code>source <span class="hljs-built_in">config</span>
+    </code></pre><p>Create a name for the container I would use later on for my task:</p>
+    <pre><code>dtnow=<span class="hljs-string">"`date +%Y%m%d%H%M%S`"</span>
+    container_name_dt=$container_name-$dtnow
+    </code></pre><p>Create an IAM role to execute my task:</p>
+    <pre><code><span class="hljs-string">aws </span><span class="hljs-string">iam </span><span class="hljs-built_in">--region</span> $<span class="hljs-string">aws_region </span><span class="hljs-built_in">create-role</span> <span class="hljs-built_in">--role-name</span> $<span class="hljs-string">role_name </span><span class="hljs-built_in">--assume-role-policy-document</span> <span class="hljs-string">file:</span>//<span class="hljs-string">task-execution-</span><span class="hljs-string">assume-role.</span><span class="hljs-string">json
+    </span><span class="hljs-string">aws </span><span class="hljs-string">iam </span><span class="hljs-built_in">--region</span> $<span class="hljs-string">aws_region </span><span class="hljs-string">attach-role-</span><span class="hljs-string">policy </span><span class="hljs-built_in">--role-name</span> $<span class="hljs-string">role_name </span><span class="hljs-built_in">--policy-arn</span> <span class="hljs-string">arn:aws:</span><span class="hljs-string">iam:</span>:<span class="hljs-string">aws:policy/</span><span class="hljs-string">service-role/</span><span class="hljs-string">AmazonECSTaskExecutionRolePolicy</span>
+    </code></pre><p>Fill out my task template, using a python script:</p>
+    <pre><code>python3 update_task_definition<span class="hljs-selector-class">.py</span> <span class="hljs-variable">$container_name_dt</span>
+    </code></pre><p>The python script reads in my environment variables, gives them names during the script runtime, fills out the below dictionary, and saves it to a json file named updated_task_definition.json (not included here because it includes secrets).</p>
     <pre><code>template = {
         <span class="hljs-string">"executionRoleArn"</span>: f<span class="hljs-string">"arn:aws:iam::{aws_account_id}:role/{role_name}"</span>,
         <span class="hljs-string">"containerDefinitions"</span>: [{
@@ -91,8 +88,8 @@
     </code></pre><p>In the AWS console, it looks like this:</p>
     <p><img src="https://github.com/JBlumstein/first-docker-app/blob/main/static/example_task_definition.png?raw=true" alt="Alt text"></p>
     <p>And run my task in my cluster, specifying that I was using Fargate and specifying the subnets and security groups for my VPC:</p>
-    <code>aws ecs run-task --launch-type FARGATE --task-definition $task_definition_name --cluster arn:aws:ecs:$aws_region:$aws_account_id:cluster/$cluster_name --network-configuration "awsvpcConfiguration={subnets=[$subnet1,$subnet2],securityGroups=[$security_group],assignPublicIp=ENABLED}"</code>
-    <p>A lot of work to run my simple docker image on AWS, especially considering I did it in a &quot;serverless&quot; way! However, it was gratifying to see my task run successfully on command and to see a new Pickle file populate in S3.</p>
+    <pre><code>aws ecs <span class="hljs-keyword">run</span><span class="bash">-task --launch-type FARGATE --task-definition <span class="hljs-variable">$task_definition_name</span> --cluster arn:aws:ecs:<span class="hljs-variable">$aws_region</span>:<span class="hljs-variable">$aws_account_id</span>:cluster/<span class="hljs-variable">$cluster_name</span> --network-configuration <span class="hljs-string">"awsvpcConfiguration={subnets=[<span class="hljs-variable">$subnet1</span>,<span class="hljs-variable">$subnet2</span>],securityGroups=[<span class="hljs-variable">$security_group</span>],assignPublicIp=ENABLED}"</span></span>
+    </code></pre><p>A lot of work to run my simple docker image on AWS, especially considering I did it in a &quot;serverless&quot; way! However, it was gratifying to see my task run successfully on command and to see a new Pickle file populate in S3.</p>
     <p>Logs for the run:</p>
     <p><img src="https://github.com/JBlumstein/first-docker-app/blob/main/static/example_logs.png?raw=true" alt="Alt text"></p>
     <p>My output folder for the model in S3 after the run:</p>
