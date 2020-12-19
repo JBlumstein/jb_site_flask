@@ -9,89 +9,161 @@
 {% block date %}2020-12-18{% endblock %}">
 
 {% block page_content %}
-    <p>See the <a href='https://github.com/JBlumstein/first-docker-app'>project repo</a> on Github
-    <h2 id="project-context">Project context</h2>
-    <p>For the last year, I&#39;ve been a contractor for Equinox, a chain of fitness clubs based in NY and with locations around the world. One major ongoing initiative there is to build two apps: an iOS and Android-based general fitness application called Variis, and a SoulCycle (an Equinox brand) at-home stationary bike. </p>
-    <p>As a data scientist and engineer, one of my responsibilities has been to create batched content recommendations for users, matching each user with exercise classes they might like. Most of these recommendations have been made on relatively simple criteria, such as most popular classes in your favorite exercise category (running, strength, cycling, yoga, etc.). These recommendations are usually created with an Athena query kicked off by an AWS lambda.</p>
-    <p>At various points in the last year, we&#39;ve looked to create more sophisticated recommendations, based on recommender system techniques such as collaborative filtering. On a very applied level, in a content recommendation context, collaborative filtering entails finding similarities between users, and then recommending pieces of content to each user based on what similar users liked or did.</p>
-    <p>However, because collaborative filtering is an intensive process and on our dataset could eventually require a greater run-time than the 15 minute limit for a lambda, we&#39;ve considered using ECS to deploy a collaborative filtering-based recommendation engine. However, due to my inexperience with Docker and ECS, this has always been a task too time consuming to be worth taking time away from other tasks for what could be only a marginal lift in user experience.</p>
-    <p>With the opportunity to build something from scratch in Harvard Extension School&#39;s CSCI-E90 (Cloud Services and Infrastructure) final project, I no longer had this excuse, since I would be building a recommender system on my own time. For the project, I decided to build something similar to what we would want at work, using a different dataset: a compendium of 25M book reviews on GoodReads.</p>
-    <p>In order to keep things simple, I chose <em>implicit</em> collaborative filtering, making recommendations for what users might want to read based on what similar users read in the past.</p>
-    <h2 id="building-locally">Building locally</h2>
-    <p>This project consisted of two main challenges: building the docker container, and posting it to ECR and running it on ECS. </p>
-    <p>The former proved much easier than the latter. To build an image for reading in data from S3, running a model, and saving it to S3 as a pickle file, and then runs it in a docker container, all I needed to do was create a python file that did the work (app/container/app.py), a requirements file for the package imports I used (app/requirements.txt),a Dockerfile defining how to build the image (app/Dockerfile), a shell script to build the image locally and create a container to run the image in (local_build_docker.sh). I also created a config file to hold my environment variables (not submitted as it contains my AWS secrets, but see example_config for something similar) to hold environment variables used throughout the repo.</p>
-    <p>I&#39;m going to hold off on going through my scripts for this part, as they are entirely non-cloud related. The result of running the build looks like this though:</p>
-    <p><img src="https://github.com/JBlumstein/first-docker-app/blob/main/static/example_docker_build.png?raw=true" alt="Alt text"></p>
-    <h2 id="moving-to-the-cloud">Moving to the cloud</h2>
-    <p>Working with docker on AWS was tougher, but I ultimately succeeded to posting my docker image to ECR and then running it in ECS using only CLI commands.</p>
-    <h3 id="posting-to-ecr">Posting to ECR</h3>
-    <p>To post my docker image to ECR, I built a short shell script, with the following steps:</p>
-    <p>Set up, by reading in my environment variables and switching into my container folder (which contains the contents of my docker image):</p>
-    <pre><code><span class="hljs-meta">#!/bin/bash</span>
-    <span class="hljs-built_in">source</span> config
-    <span class="hljs-built_in">cd</span> container
-    </code></pre><p>Next I logged in to AWS:</p>
-    <pre><code><span class="hljs-string">aws </span><span class="hljs-string">ecr </span><span class="hljs-built_in">get-login-password</span> <span class="hljs-built_in">--region</span> $<span class="hljs-string">aws_region </span>| <span class="hljs-string">docker </span><span class="hljs-string">login </span><span class="hljs-built_in">--username</span> <span class="hljs-string">AWS </span><span class="hljs-built_in">--password-stdin</span> $<span class="hljs-string">repo_image</span>
-    </code></pre><p>I then built my repo in ECR:</p>
-    <pre><code><span class="hljs-string">aws </span><span class="hljs-string">ecr </span><span class="hljs-built_in">create-repository</span> <span class="hljs-built_in">--repository-name</span> $<span class="hljs-string">repo_name</span>
-    </code></pre><p>I next built my image with my argument values (ARGs in my Dockerfile) and tagged it:</p>
-    <pre><code>docker build -<span class="hljs-params">-build</span><span class="hljs-params">-arg</span> aws_key=$AWSAccessKeyId -<span class="hljs-params">-build</span><span class="hljs-params">-arg</span> aws_secret=$AWSSecretKey <span class="hljs-params">-t</span> $repo_name:$repo_tag .
-    docker <span class="hljs-built_in">tag</span> $repo_name:$repo_tag $repo_image/$repo_name:$repo_tag
-    </code></pre><p>Finally, I pushed my image to ECR:</p>
-    <pre><code>docker <span class="hljs-keyword">push</span> $repo_image/$repo_name:$repo_tag
-    </code></pre><p>Here&#39;s my repo on ECR:</p>
-    <p><img src="https://github.com/JBlumstein/first-docker-app/blob/main/static/example_ecr.png?raw=true" alt="Alt text"></p>
-    <h3 id="running-on-ecs">Running on ECS</h3>
-    <p>The toughest part, by a good margin, was figuring out how to run my image, now in ECR, on ECS. In order to simplify things, I used Fargate, but I still needed a fairly lengthy shell script, a json file, and a Python script to build a task definition, to get it done from the CLI.</p>
-    <p>Let&#39;s dig in to it:</p>
-    <p>In my deploy_and_run_fargate.sh script, I had to take the following steps:</p>
-    <p>Read in environment variables:</p>
-    <pre><code>source <span class="hljs-built_in">config</span>
-    </code></pre><p>Create a name for the container I would use later on for my task:</p>
-    <pre><code>dtnow=<span class="hljs-string">"`date +%Y%m%d%H%M%S`"</span>
-    container_name_dt=$container_name-$dtnow
-    </code></pre><p>Create an IAM role to execute my task:</p>
-    <pre><code><span class="hljs-string">aws </span><span class="hljs-string">iam </span><span class="hljs-built_in">--region</span> $<span class="hljs-string">aws_region </span><span class="hljs-built_in">create-role</span> <span class="hljs-built_in">--role-name</span> $<span class="hljs-string">role_name </span><span class="hljs-built_in">--assume-role-policy-document</span> <span class="hljs-string">file:</span>//<span class="hljs-string">task-execution-</span><span class="hljs-string">assume-role.</span><span class="hljs-string">json
-    </span><span class="hljs-string">aws </span><span class="hljs-string">iam </span><span class="hljs-built_in">--region</span> $<span class="hljs-string">aws_region </span><span class="hljs-string">attach-role-</span><span class="hljs-string">policy </span><span class="hljs-built_in">--role-name</span> $<span class="hljs-string">role_name </span><span class="hljs-built_in">--policy-arn</span> <span class="hljs-string">arn:aws:</span><span class="hljs-string">iam:</span>:<span class="hljs-string">aws:policy/</span><span class="hljs-string">service-role/</span><span class="hljs-string">AmazonECSTaskExecutionRolePolicy</span>
-    </code></pre><p>Fill out my task template, using a python script:</p>
-    <pre><code>python3 update_task_definition<span class="hljs-selector-class">.py</span> <span class="hljs-variable">$container_name_dt</span>
-    </code></pre><p>The python script reads in my environment variables, gives them names during the script runtime, fills out the below dictionary, and saves it to a json file named updated_task_definition.json (not included here because it includes secrets).</p>
-    <pre><code>template = {
-        <span class="hljs-string">"executionRoleArn"</span>: f<span class="hljs-string">"arn:aws:iam::{aws_account_id}:role/{role_name}"</span>,
-        <span class="hljs-string">"containerDefinitions"</span>: [{
-            <span class="hljs-string">"logConfiguration"</span>: {
-                <span class="hljs-string">"logDriver"</span>: <span class="hljs-string">"awslogs"</span>,
-                <span class="hljs-string">"options"</span>: {
-                    <span class="hljs-string">"awslogs-group"</span>: log_group_name,
-                    <span class="hljs-string">"awslogs-region"</span>: aws_region,
-                    <span class="hljs-string">"awslogs-stream-prefix"</span>: <span class="hljs-string">"ecs"</span>
-                }
-            },
-            <span class="hljs-string">"image"</span>: f<span class="hljs-string">"{repo_image}/{repo_name}:{repo_tag}"</span>,
-            <span class="hljs-string">"name"</span>: container_name
-        }],
-        <span class="hljs-string">"memory"</span>: <span class="hljs-string">"8192"</span>,
-        <span class="hljs-string">"taskRoleArn"</span>: f<span class="hljs-string">"arn:aws:iam::{aws_account_id}:role/{role_name}"</span>,
-        <span class="hljs-string">"family"</span>: task_definition_name,
-        <span class="hljs-string">"requiresCompatibilities"</span>: [<span class="hljs-string">"FARGATE"</span>],
-        <span class="hljs-string">"networkMode"</span>: <span class="hljs-string">"awsvpc"</span>,
-        <span class="hljs-string">"cpu"</span>: <span class="hljs-string">"2048"</span>
-    }
-    </code></pre><p>Create a cluster on ECS, putting it in Fargate mode so I don&#39;t have to deal with servers:</p>
-    <pre><code><span class="hljs-string">aws </span><span class="hljs-string">ecs </span><span class="hljs-built_in">create-cluster</span> <span class="hljs-built_in">--cluster-name</span> $<span class="hljs-string">cluster_name </span><span class="hljs-built_in">--capacity-providers</span> <span class="hljs-string">FARGATE </span>
-    </code></pre><p>Here&#39;s what it the cluster looks like in the AWS console:</p>
-    <p><img src="https://github.com/JBlumstein/first-docker-app/blob/main/static/example_ecs_cluster.png?raw=true" alt="Alt text"></p>
-    <p>Create a log group on Cloudwatch:</p>
-    <pre><code><span class="hljs-string">aws </span><span class="hljs-string">logs </span><span class="hljs-built_in">create-log-group</span> <span class="hljs-built_in">--log-group-name</span> $<span class="hljs-string">log_group_name</span>
-    </code></pre><p>Register my task definition, using the json file that I created in my Python script:</p>
-    <pre><code>aws ecs register-task-definition --<span class="hljs-keyword">cli</span>-<span class="hljs-keyword">input</span>-json <span class="hljs-keyword">file</span>:<span class="hljs-comment">//updated_task_definition.json</span>
-    </code></pre><p>In the AWS console, it looks like this:</p>
-    <p><img src="https://github.com/JBlumstein/first-docker-app/blob/main/static/example_task_definition.png?raw=true" alt="Alt text"></p>
-    <p>And run my task in my cluster, specifying that I was using Fargate and specifying the subnets and security groups for my VPC:</p>
-    <pre><code>aws ecs <span class="hljs-keyword">run</span><span class="bash">-task --launch-type FARGATE --task-definition <span class="hljs-variable">$task_definition_name</span> --cluster arn:aws:ecs:<span class="hljs-variable">$aws_region</span>:<span class="hljs-variable">$aws_account_id</span>:cluster/<span class="hljs-variable">$cluster_name</span> --network-configuration <span class="hljs-string">"awsvpcConfiguration={subnets=[<span class="hljs-variable">$subnet1</span>,<span class="hljs-variable">$subnet2</span>],securityGroups=[<span class="hljs-variable">$security_group</span>],assignPublicIp=ENABLED}"</span></span>
-    </code></pre><p>A lot of work to run my simple docker image on AWS, especially considering I did it in a &quot;serverless&quot; way! However, it was gratifying to see my task run successfully on command and to see a new Pickle file populate in S3.</p>
-    <p>Logs for the run:</p>
-    <p><img src="https://github.com/JBlumstein/first-docker-app/blob/main/static/example_logs.png?raw=true" alt="Alt text"></p>
-    <p>My output folder for the model in S3 after the run:</p>
-    <p><img src="https://github.com/JBlumstein/first-docker-app/blob/main/static/example_s3.png?raw=true" alt="Alt text"></p>
+<p>See the <a href='https://github.com/JBlumstein/first-docker-app'>project repo</a> on Github
+
+<h2 id="project-context">Project context</h2>
+
+<p>For the last year, I&#39;ve been a contractor for Equinox, a chain of fitness clubs based in NY and with locations around the world. One major ongoing initiative there is to build two apps: an iOS and Android-based general fitness application called Variis, and a SoulCycle (an Equinox brand) at-home stationary bike. </p>
+
+<p>As a data scientist and engineer, one of my responsibilities has been to create batched content recommendations for users, matching each user with exercise classes they might like. Most of these recommendations have been made on relatively simple criteria, such as most popular classes in your favorite exercise category (running, strength, cycling, yoga, etc.). These recommendations are usually created with an Athena query kicked off by an AWS lambda.</p>
+
+<p>At various points in the last year, we&#39;ve looked to create more sophisticated recommendations, based on recommender system techniques such as collaborative filtering. On a very applied level, in a content recommendation context, collaborative filtering entails finding similarities between users, and then recommending pieces of content to each user based on what similar users liked or did.</p>
+
+<p>However, because collaborative filtering is an intensive process and on our dataset could eventually require a greater run-time than the 15 minute limit for a lambda, we&#39;ve considered using ECS to deploy a collaborative filtering-based recommendation engine. However, due to my inexperience with Docker and ECS, this has always been a task too time consuming to be worth taking time away from other tasks for what could be only a marginal lift in user experience.</p>
+
+<p>With the opportunity to build something from scratch in Harvard Extension School&#39;s CSCI-E90 (Cloud Services and Infrastructure) final project, I no longer had this excuse, since I would be building a recommender system on my own time. For the project, I decided to build something similar to what we would want at work, using a different dataset: a compendium of 25M book reviews on GoodReads.</p>
+
+<p>In order to keep things simple, I chose <em>implicit</em> collaborative filtering, making recommendations for what users might want to read based on what similar users read in the past.</p>
+
+<h2 id="building-locally">Building locally</h2>
+
+<p>This project consisted of two main challenges: building the docker container, and posting it to ECR and running it on ECS. </p>
+
+<p>The former proved much easier than the latter. To build an image for reading in data from S3, running a model, and saving it to S3 as a pickle file, and then runs it in a docker container, all I needed to do was create a python file that did the work (app/container/app.py), a requirements file for the package imports I used (app/requirements.txt),a Dockerfile defining how to build the image (app/Dockerfile), a shell script to build the image locally and create a container to run the image in (local_build_docker.sh). I also created a config file to hold my environment variables (not submitted as it contains my AWS secrets, but see example_config for something similar) to hold environment variables used throughout the repo.</p>
+
+<p>I&#39;m going to hold off on going through my scripts for this part, as they are entirely non-cloud related. The result of running the build looks like this though:</p>
+
+<p><img src="https://github.com/JBlumstein/first-docker-app/blob/main/static/example_docker_build.png?raw=true" alt="Alt text"></p>
+
+<h2 id="moving-to-the-cloud">Moving to the cloud</h2>
+
+<p>Working with docker on AWS was tougher, but I ultimately succeeded to posting my docker image to ECR and then running it in ECS using only CLI commands.</p>
+
+<h3 id="posting-to-ecr">Posting to ECR</h3>
+<p>To post my docker image to ECR, I built a short shell script, with the following steps:</p>
+
+<p>Set up, by reading in my environment variables and switching into my container folder (which contains the contents of my docker image):</p>
+
+<pre><code>>#!/bin/bash
+source config
+cd container
+</code></pre>
+
+<p>Next I logged in to AWS:</p>
+
+<pre><code>aws ecr get-login-password --region $aws_region docker login --username AWS --password-stdin repo_image
+</code></pre>
+
+<p>I then built my repo in ECR:</p>
+
+<pre><code>aws ecr create-repository --repository-name $repo_name
+</code></pre>
+
+<p>I next built my image with my argument values (ARGs in my Dockerfile) and tagged it:</p>
+
+<pre><code>docker build --build-arg aws_key=$AWSAccessKeyId --build-arg aws_secret=$AWSSecretKey -t $repo_name:$repo_tag .
+docker tag $repo_name:$repo_tag $repo_image/$repo_name:$repo_tag
+</code></pre>
+
+<p>Finally, I pushed my image to ECR:</p>
+
+<pre><code>docker push $repo_image/$repo_name:$repo_tag
+</code></pre>
+
+<p>Here&#39;s my repo on ECR:</p>
+
+<p><img src="https://github.com/JBlumstein/first-docker-app/blob/main/static/example_ecr.png?raw=true" alt="Alt text"></p>
+
+<h3 id="running-on-ecs">Running on ECS</h3>
+<p>The toughest part, by a good margin, was figuring out how to run my image, now in ECR, on ECS. In order to simplify things, I used Fargate, but I still needed a fairly lengthy shell script, a json file, and a Python script to build a task definition, to get it done from the CLI.</p>
+
+<p>Let&#39;s dig in to it:</p>
+
+<p>In my deploy_and_run_fargate.sh script, I had to take the following steps:</p>
+
+<p>Read in environment variables:</p>
+
+<pre><code>source config
+</code></pre>
+
+<p>Create a name for the container I would use later on for my task:</p>
+
+<pre><code>dtnow="`date +%Y%m%d%H%M%S`"
+container_name_dt=$container_name-$dtnow
+</code></pre>
+
+<p>Create an IAM role to execute my task:</p>
+
+<pre><code>aws iam --region $aws_region create-role --role-name $role_name --assume-role-policy-document file://task-execution-assume-role.json
+aws iam --region $aws_region attach-role-policy --role-name $role_name --policy-arn arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+</code></pre>
+
+<p>Fill out my task template, using a python script:</p>
+
+<pre><code>python3 update_task_definition.py $container_name_dt
+</code></pre>
+
+<p>The python script reads in my environment variables, gives them names during the script runtime, fills out the below dictionary, and saves it to a json file named updated_task_definition.json (not included here because it includes secrets).</p>
+
+<pre><code>template = {
+    <span class="hljs-string">"executionRoleArn"</span>: f<span class="hljs-string">"arn:aws:iam::{aws_account_id}:role/{role_name}"</span>,
+    <span class="hljs-string">"containerDefinitions"</span>: [{
+        <span class="hljs-string">"logConfiguration"</span>: {
+            <span class="hljs-string">"logDriver"</span>: <span class="hljs-string">"awslogs"</span>,
+            <span class="hljs-string">"options"</span>: {
+                <span class="hljs-string">"awslogs-group"</span>: log_group_name,
+                <span class="hljs-string">"awslogs-region"</span>: aws_region,
+                <span class="hljs-string">"awslogs-stream-prefix"</span>: <span class="hljs-string">"ecs"</span>
+            }
+        },
+        <span class="hljs-string">"image"</span>: f<span class="hljs-string">"{repo_image}/{repo_name}:{repo_tag}"</span>,
+        <span class="hljs-string">"name"</span>: container_name
+    }],
+    <span class="hljs-string">"memory"</span>: <span class="hljs-string">"8192"</span>,
+    <span class="hljs-string">"taskRoleArn"</span>: f<span class="hljs-string">"arn:aws:iam::{aws_account_id}:role/{role_name}"</span>,
+    <span class="hljs-string">"family"</span>: task_definition_name,
+    <span class="hljs-string">"requiresCompatibilities"</span>: [<span class="hljs-string">"FARGATE"</span>],
+    <span class="hljs-string">"networkMode"</span>: <span class="hljs-string">"awsvpc"</span>,
+    <span class="hljs-string">"cpu"</span>: <span class="hljs-string">"2048"</span>
+}
+</code></pre>
+
+<p>Create a cluster on ECS, putting it in Fargate mode so I don&#39;t have to deal with servers:</p>
+
+<pre><code>aws ecs create-cluster --cluster-name cluster_name --capacity-providers FARGATE
+</code></pre>
+
+<p>Here&#39;s what it the cluster looks like in the AWS console:</p>
+
+<p><img src="https://github.com/JBlumstein/first-docker-app/blob/main/static/example_ecs_cluster.png?raw=true" alt="Alt text"></p>
+
+<p>Create a log group on Cloudwatch:</p>
+
+<pre><code>aws logs create-log-group --log-group-name $log_group_name
+</code></pre>
+
+<p>Register my task definition, using the json file that I created in my Python script:</p>
+
+<pre><code>aws ecs register-task-definition --cli-input-json file://updated_task_definition.json
+</code></pre>
+
+<p>In the AWS console, it looks like this:</p>
+
+<p><img src="https://github.com/JBlumstein/first-docker-app/blob/main/static/example_task_definition.png?raw=true" alt="Alt text"></p>
+
+<p>And run my task in my cluster, specifying that I was using Fargate and specifying the subnets and security groups for my VPC:</p>
+
+<pre><code>aws ecs run-task --launch-type FARGATE --task-definition $task_definition_name --cluster arn:aws:ecs:$aws_region:$aws_account_id:cluster/$cluster_name --network-configuration "awsvpcConfiguration={subnets=[$subnet1,$subnet2],securityGroups=[$security_group],assignPublicIp=ENABLED}"
+</code></pre>
+
+<p>A lot of work to run my simple docker image on AWS, especially considering I did it in a &quot;serverless&quot; way! However, it was gratifying to see my task run successfully on command and to see a new Pickle file populate in S3.</p>
+
+<p>Logs for the run:</p>
+
+<p><img src="https://github.com/JBlumstein/first-docker-app/blob/main/static/example_logs.png?raw=true" alt="Alt text"></p>
+
+<p>My output folder for the model in S3 after the run:</p>
+
+<p><img src="https://github.com/JBlumstein/first-docker-app/blob/main/static/example_s3.png?raw=true" alt="Alt text"></p>
+
 {% endblock %}
