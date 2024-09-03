@@ -125,3 +125,6 @@ def video2minutes():
 @app.route('/video15minutes')
 def video15minutes():
 	return redirect("https://youtu.be/aiwFm6MiPqY")
+
+# if __name__ == '__main__':
+# 	app.run(debug=True)
