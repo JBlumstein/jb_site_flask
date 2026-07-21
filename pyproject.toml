@@ -1,0 +1,9 @@
+[project]
+name = "jb-site-flask"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "flask>=3.1",
+    "gunicorn>=22",
+    "flask-talisman>=1.1",
+]
