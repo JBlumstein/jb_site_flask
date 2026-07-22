@@ -6,7 +6,7 @@ from flask import Flask, request, session, g, redirect, url_for, abort, render_t
 from flask_talisman import Talisman
 
 app = Flask(__name__)
-Talisman(app)
+Talisman(app, content_security_policy={})
 
 ### posts not to index in list of blog posts
 not_blog_posts = set(['index.html', 'base.html', 'hello.html', 'old-website-build.html', 'blog-post-template.html', 'index-with-tagged-posts.html', 'main-page-base.html', 'lords-of-strategy-review.html'])
