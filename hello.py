@@ -6,7 +6,7 @@ from flask import Flask, request, session, g, redirect, url_for, abort, render_t
 from flask_talisman import Talisman
 
 app = Flask(__name__)
-Talisman(app, content_security_policy={})
+Talisman(app)
 
 ### posts not to index in list of blog posts
 not_blog_posts = set(['index.html', 'base.html', 'hello.html', 'old-website-build.html', 'blog-post-template.html', 'index-with-tagged-posts.html', 'main-page-base.html', 'lords-of-strategy-review.html'])
@@ -49,7 +49,8 @@ def get_post_data(folder, post):
 	tags = get_article_attribute(printed_article, 'tags', '')
 	tags = tags.split(sep=', ')
 	tags = set(tags)
-	post_data = {'post':post, 'stub':stub, 'url_path':url_path, 'title': title, 'date': date, 'description': description, 'tags': tags}
+	rating = get_article_attribute(printed_article, 'rating', '0')
+	post_data = {'post':post, 'stub':stub, 'url_path':url_path, 'title': title, 'date': date, 'description': description, 'tags': tags, 'rating': rating}
 	return post_data
 
 def print_article(folder, article):

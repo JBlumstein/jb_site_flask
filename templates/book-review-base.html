@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+    <title>{% block title %}{% endblock %} - Jonah Blumstein</title>
+    <meta name="description" content="{% block description %}{% endblock %}" />
+    <meta name="keywords" content="Jonah Blumstein, {% block tags %}{% endblock %}">
+    <meta name="date" content="{% block date %}{% endblock %}" scheme="YYYY-MM-DD">
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='output.css') }}">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,600italic,700,700italic,300italic' rel='stylesheet' type='text/css'>
+    <link rel="icon" type="image/jpeg" href="{{ url_for('static', filename='imgs/jbheadshotfavicon.jpg') }}">
+</head>
+<body>
+	<div class="nav_container">
+		<div class="nav_sizer">
+			<nav>
+				<div class="menu_container">
+					<ul>
+						<li class="myname"><a href="/">Jonah Blumstein</a></li>
+						<li><a href="/">Bio / Home</a></li>
+						<li><a href="mailto:jonah.blumstein@gmail.com">Contact</a></li>
+					</ul>
+				</div>
+			</nav>
+		</div>
+	</div>
+	<div class="page_container">
+		<div class="page">
+            <div class="img-book">
+		        <img src="{{ url_for('static', filename='imgs/' ~ self.cover()) }}" alt="Headshot">
+	        </div>
+			<h1>{{ self.title() }}</h1>
+			<h2 id="date">{{ self.date() }}</h2>
+			{% block page_content %}
+			{% endblock page_content%}
+            <p>{% for i in range(self.rating() | int) %}&#9733;{% endfor %}{% for i in range(5 - (self.rating() | int)) %}&#9734;{% endfor %}</p>
+			<hr>
+			<p>Tags: {% for one_tag in single_post_tags %}<a href="/blog_posts_tagged:{{ one_tag }}/">{{ one_tag }}</a>{% if not loop.last %}, {% endif %}{% endfor %}</p>
+			<p>[<a href="/">Return Home</a>]
+		</div>
+	</div>
+</body>
+</html>

@@ -73,3 +73,10 @@ body {
     -webkit-border-radius: 9em;
     -moz-border-radius: 9em;
     border-radius: 9em; }
+
+.img-book {
+  float: left;
+  width: 10em;
+  margin: 2em 1em 1em 0; }
+  .img-book img {
+    width: 100%; }
