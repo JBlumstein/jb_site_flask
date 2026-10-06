@@ -13,7 +13,6 @@ not_blog_posts = set(['index.html', 'base.html', 'hello.html', 'old-website-buil
 
 
 ### start functions for displaying blog post information ###
-
 def top_level(folder):
 	'''top level function to run on load'''
 	jonahs_blog_posts = get_post_names(folder)
@@ -85,21 +84,12 @@ def get_tag_counts(all_tags):
 		tag_data = {'tag_name': tag, 'tag_count': all_tags.count(tag)}
 		all_tags_data.append(tag_data)
 	return all_tags_data
-
 ### end functions for displaying blog post information ###
 
-
 ### run the functions for displaying blog post information ###
-### for local on IBM mac###
-# blog_posts_and_paths, tags_and_counts = top_level("/Users/jblumst@us.ibm.com/Documents/personal_website/jb_site_flask/templates/")
-### for local on personal mac###
-# blog_posts_and_paths, tags_and_counts = top_level("/Users/jonahblumstein/Documents/jb_site_flask/")
 blog_posts_and_paths, tags_and_counts = top_level("./templates/")
-### for staging ###
-# blog_posts_and_paths, tags_and_counts = top_level("/app/templates/")
 
 ### routing ###
-
 @app.route('/')
 def index():
 	'''render template for index page'''
